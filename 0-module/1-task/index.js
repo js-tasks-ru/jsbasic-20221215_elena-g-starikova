@@ -1,7 +1,5 @@
 function sum(m, n) {
-  let sum = 0;
-  sum = m + n;
-  console.log(sum)
+  return  m + n;
 }
 sum(1, 1)
 sum(2, 5)
