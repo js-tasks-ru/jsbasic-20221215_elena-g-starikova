@@ -1,5 +1,20 @@
+function read(a, b) {
+  this.a = a,
+  this.b = b,
+};
+function sum() {
+  return this.a + this.b
+};
+function mul() {
+  return  this.a * this.b
+};
+
 let calculator = {
-  // ваш код
+    read(),
+    a,
+    b,
+    sum(),
+    mul(),
 };
 
 // НЕ УДАЛЯТЬ СТРОКУ, НУЖНА ДЛЯ ПРОВЕРКИ
