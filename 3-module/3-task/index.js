@@ -4,9 +4,11 @@
         .split("-")
         .map(function (item, index) {
           if (index == 0){
-            item
+            return item
           }
-          else{item[0].toUpperCase() + item.slice(1)  }
+          else{
+            return item[0].toUpperCase() + item.slice(1)  
+          }
         }
       )
         .join('')
