@@ -1,30 +1,49 @@
 
 function initCarousel() {
-  let carouselInner = document.querySelector(".carousel__inner");
-  let carousel = document.querySelector(".carousel");
-  let shift = 300;
-  carousel.addEventListener("click", function(event) {
+  let currentSlideNumber = 0;
+  let slidesAmount = 4;
+  let elem = document.querySelector('[data-carousel-holder]');
 
-    for (node of carousel.child(Nodes)) {
-      if (event.target.contains(".carousel__arrow") !== "true") return;
+  let carouselInnerElem = elem.querySelector('.carousel__inner');
+  let carouselArrowRight = elem.querySelector('.carousel__arrow_right');
+  let carouselArrowLeft = elem.querySelector('.carousel__arrow_left');
 
-      if (event.target.classList.contains(".carousel__arrow" && ".carousel__arrow_right") === "true") {
-        carouselInner.style.transform = 'translateX(-shift + "px")';
-         if (shift === 900) {
-          event.target.style.display = "none"
-        }
-        shift += shift
-      };
+  update();
 
-      if (event.target.classList.contains(".carousel__arrow" && ".carousel__arrow_left") === "true") {
-        carouselInner.style.transform = 'translateX(shift + "px")';
-        
-        if (shift === 900) {
-          event.target.style.display = "none"
-        }
-        shift += shift
-      };
-     
+  elem.onclick = ({target}) => {
+    if (target.closest('.carousel__arrow_right')) {
+      next();
     }
-  })
+
+    if (target.closest('.carousel__arrow_left')) {
+      prev();
+    }
+  };
+
+  function next() {
+    currentSlideNumber++;
+    update();
+  }
+
+  function prev() {
+    currentSlideNumber--;
+    update();
+  }
+
+  function update() {
+    let offset = -carouselInnerElem.offsetWidth * currentSlideNumber;
+    carouselInnerElem.style.transform = `translateX(${offset}px)`;
+
+    if (currentSlideNumber == slidesAmount - 1) {
+      carouselArrowRight.style.display = 'none';
+    } else {
+      carouselArrowRight.style.display = '';
+    }
+
+    if (currentSlideNumber == 0) {
+      carouselArrowLeft.style.display = 'none';
+    } else {
+      carouselArrowLeft.style.display = '';
+    }
+  }
 }
