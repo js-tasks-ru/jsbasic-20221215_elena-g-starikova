@@ -14,7 +14,7 @@
  */
 export default class UserTable {
   constructor(rows) {
-    this.elem = document.createElement("TABLE");
+    this.elem = document.createElement("TABLE")
 
     this.elem.innerHTML = `
       <thead>
@@ -28,26 +28,25 @@ export default class UserTable {
       </thead>
     `;
     let tableInner = rows.map(row => {
-      let cellsWithData = Object.values(row).map(value => `<td>{value}</td>`).join("");
+      let cellsWithData = Object.values(row).map(value => `<td>{value}</td>`).join('');
      
       return `
-        <tr>
+        <tr
         ${cellsWithData}
         <td><button>X</button></td>
         </tr>
       `
-    }).join("");
+    }).join('');
 
-    this.elem.InnerHTML += `
+    this.elem.innerHTML += `
       <tbody>
       ${tableInner}
       </tbody>
     `;
-
     this.elem.addEventListener('click', (event) => this.onClick(event));
-  }
+   }
 
-  onClick(event) {
+    onClick(event) {
     if (event.target.tagName != 'BUTTON') {
       return;
     }
@@ -56,9 +55,10 @@ export default class UserTable {
 
     tr.remove();
   }
-}
 
-  
+}
  
+
+
   
 
