@@ -5,7 +5,8 @@ export default class ProductCard {
   constructor(product) {
     this.product = product;
     this.render();
-    this.addListeners();
+    this.addListener();
+    
   }
 
   render() {
@@ -27,14 +28,13 @@ export default class ProductCard {
     </div>`);
   }
 
-  addListeners() {
-    this.elem.onclick = (event) => this.onClick(event);
-  }
-
-  onClick(event) {
-    this.elem.dispatchEvent(new CustomEvent("product-add", {
-      detail: this.product.id,
-      bubbles: true
-    }));
-  }
+  addListener () {
+    let AddEvent = new CustomEvent("product-add", { 
+        detail: this.product.id, 
+        bubbles: true 
+    })
+    this.elem.addEventListener ("click", () => {
+        this.elem.dispatchEvent(AddEvent)
+    })
+}
 }
