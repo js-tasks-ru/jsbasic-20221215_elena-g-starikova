@@ -50,6 +50,7 @@ export default class UserTable {
     if (event.target.tagName != 'BUTTON') {
       return;
     }
+    
 
     let tr = event.target.closest('tr');
 
