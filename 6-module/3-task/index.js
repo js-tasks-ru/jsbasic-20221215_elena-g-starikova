@@ -44,10 +44,11 @@ export default class Carousel {
     this.update();
   }
 
-  addListeners() {
+  addListeners = () => {
     
-    this.elem.addEventListener("click", function(event) {
+    this.elem.addEventListener("click", (event) => {
       let button = event.target.closest(".carousel__button")
+
       if (button) {
         let id = event.target.closest(`[data-id]`).dataset.id  
         this.elem.dispatchEvent(new CustomEvent('product-add', {
@@ -57,11 +58,11 @@ export default class Carousel {
       }
 
       if (event.target.closest('.carousel__arrow_right')) {
-        next();
+        this.next();
       }
   
       if (event.target.closest('.carousel__arrow_left')) {
-        prev();
+        this.prev();
       }
     })
   } 
@@ -71,12 +72,12 @@ export default class Carousel {
     return this.elem.querySelector(`.carousel__${ref}`);
   }
 
-  next() {
+  next = () => {
     this.currentSlideNumber++;
     this.update();
   }
 
-  prev() {
+  prev = () => {
     this.currentSlideNumber--;
     this.update();
   }
