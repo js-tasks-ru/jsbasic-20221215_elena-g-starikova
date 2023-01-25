@@ -3,9 +3,9 @@ import createElement from '../../assets/lib/create-element.js';
 export default class RibbonMenu {
   constructor (categories) {
       this.categories = categories
-      this.currentStepNumber = 0
       this.render()
       this.addListeners()
+      
   }
 
   render () {
@@ -31,40 +31,25 @@ export default class RibbonMenu {
       `);
       // вёрстка ссылок на категорию с добавлением информации из объекта
       let links = this.categories.map(item => createElement (`
-          <a href="#" class="ribbon__item" data-id="${categories.id}">${categories.name}</a>
+          <a href="#" class="ribbon__item" data-id="${item.id}">${item.name}</a>
       `)
       )
       this.sub('inner').append(...links);
-
+      this.update()
   }
 
   addListeners () {
       //прокрутка по 350px при клике по кнопкам вперед, назад
       this.elem.addEventListener ('click', (event) => {
+
         if (event.target.closest('.ribbon__arrow_right')) {
-          this.sub('inner').scrollTo(350, 0);
+          this.sub('inner').scrollBy(350, 0);
+          this.update();
         }
         if (event.target.closest('.ribbon__arrow_left')) {
-          this.sub('inner').scrollTo(-350, 0);
+          this.sub('inner').scrollBy(-350, 0);
+          this.update();
         }
-
-        
-
-       // скрыть кнопки переключения при крайних положениях меню  
-       let scrollWidth = this.sub('inner').scrollWidth;
-       let scrollLeft = this.sub('inner').scrollLeft;
-       let clientWidth = this.sub('inner').clientWidth;
-       
-       let scrollRight = scrollWidth - scrollLeft - clientWidth;
-
-        if(scrollLeft == 0) {
-          this.sub("arrow_left").classList.toggle(visible);
-        }
-
-        if(scrollRight < 1) {
-          this.sub("arrow_right").classList.toggle(visible);
-        }
-
       })
 
         //выбор конкретной категории при клике на ссылку: отменить действие браузеа, удалить класс выбранный ранее & добавить пользовательское событие
@@ -75,25 +60,51 @@ export default class RibbonMenu {
           let link = event.target.closest(".ribbon__item")
 
           if(link) {
-            event.target.preventDefault();
+            // this.event.preventDefault();
             if (selectedLink) {
-              selectedLink.classlist.remove("active");
+              this.selectedLink.classList.remove("ribbon__item_active");
             }
-            selectedLink = link;
-            selectedLink.classlist.add('active');
+            this.selectedLink = link;
+            this.selectedLink.classList.add('ribbon__item_active');
 
             let id = event.target.closest(`[data-id]`).dataset.id  
             this.elem.dispatchEvent(new CustomEvent('ribbon-select', {
               detail: id,
-              bubbles: true,
+              bubbles: true
           }));
          }
        })
     
-// сокращенная запись элемента
+
+  }
+
+  // сокращенная запись элемента
   sub(ref) {
-      return this.elem.querySelector(`.ribbon__${ref}`);
-    }
+    return this.elem.querySelector(`.ribbon__${ref}`);
+  }
+
+
+ // скрыть кнопки переключения при крайних положениях меню
+  update() {
+    let scrollWidth = this.sub('inner').scrollWidth;
+       let scrollLeft = this.sub('inner').scrollLeft;
+       let clientWidth = this.sub('inner').clientWidth;
+       
+       let scrollRight = scrollWidth - scrollLeft - clientWidth;
+
+        if(scrollLeft > 0) {
+          // добавляю/удаляю класс ribbon__arrow_visible
+          this.sub("arrow_left").classList.add('ribbon__arrow_visible');
+        } else {
+          this.sub("arrow_left").classList.remove('ribbon__arrow_visible');
+        }
+
+        if(scrollRight >= 1) {
+          // добавляю/удаляю класс ribbon__arrow_visible
+          this.sub("arrow_right").classList.add('ribbon__arrow_visible');
+        } else {
+          this.sub("arrow_right").classList.remove('ribbon__arrow_visible');
+        }
 
   }
 }
