@@ -2,14 +2,13 @@ import createElement from '../../assets/lib/create-element.js';
 
 export default class Modal {
   constructor() {
-    this.open();
-    this.setTitle();
-    this.setBody();
-    this.close()
+    this.render();
+    this.elem.addEventListener("click", (event) => this.onClick(event));
+
 }
 
-open () {
-    let elem = createElement(`
+render () {
+    this.elem = createElement(`
     
     <div class="modal">
     
@@ -34,37 +33,49 @@ open () {
   
     </div>
     `);
-    
-    elem.classList.add(".is-modal-open");
-}
-// я бы modalTitle в innerHtML добавила, но по описанию задачи похоже так:
-setTitle (modalTitle) {
-    let titleItem = document.querySelector(".modal__title");
-    titleItem = modalTitle
-}
-setBody () { 
-    let modalBody = document.querySelector(".modal__body");
-    
-    modalBody.innerHTML = `<b>тут содержится тело модального окна</b>`
-    
-}
-close () {
+  }
 
-    this.modal.addEventListener("click", (event) => {
-        let button = event.target.closest(".modal__close")
-        if (button) {
-            document.body.classList.remove(".is-modal-open")
-        }
-    })
-    this.modal.addEventListener("keydown", modalClose, [once]);
+  sub(ref) {
+    return this.elem.querySelector(`.modal__${ref}`)
+  }
+  open() {
+    document.body.append(this.elem);
+    document.body.classList.add('is-modal-open');
 
-    function modalClose (event) {
-        if (event.code === 'Escape') {
-            document.body.classList.remove(".is-modal-open")
-        }
+    this._keydownEventListener = (event) => this.onDocumentKeyDown(event);
+    document.addEventListener('keydown', this._keydownEventListener);
+
+    if (this.elem.querySelector('[autofocus]')) {
+      this.elem.querySelector('[autofocus]').focus();
     }
+  }
 
-}
+  onClick(event) {
+    if (event.target.closest(".modal__close")) {
+      event.preventDefault();
+      this.close();
+    }
+  }
+
+  setTitle (title) {
+    this.sub('title').textContent = title;
+  }
+  setBody (node) {
+    this.sub('body').innerHTML = '';
+    this.sub('body').append(node)
+  }
+
+  onDocumentKeyDown(event) {
+    if (event.code === 'Escape') {
+      event.preventDefault();
+      this.close()
+    }
+  }
+  close () {
+    document.removeEventListener('keydown', this._keydownEventListener);
+    document.body.classList.remove('is-modal-open');
+    this.elem.remove();    
+  }
 }
 
 
