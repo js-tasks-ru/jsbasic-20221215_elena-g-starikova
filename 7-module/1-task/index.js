@@ -60,7 +60,7 @@ export default class RibbonMenu {
           let link = event.target.closest(".ribbon__item")
 
           if(link) {
-            // this.event.preventDefault();
+            event.preventDefault();
             if (selectedLink) {
               this.selectedLink.classList.remove("ribbon__item_active");
             }
